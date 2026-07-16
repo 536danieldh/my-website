@@ -1,0 +1,726 @@
+Moondrop Cafe
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moon Drop Cafe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-indigo: #2195e8;
+    --ink-indigo-deep: #d8efff;
+    --moon-glow: #1b365d;
+    --lilac-mist: #7bbcf7;
+    --amber-drop: #4da8ff;
+    --plum-shadow: #b9e3ff;
+    --plum-shadow-soft: #eaf8ff;
+    --fog-grey: #5f7d99;
+    --line: rgba(27,54,93,0.12);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--ink-indigo);
+    color: var(--moon-glow);
+    font-family: 'Manrope', sans-serif;
+    overflow-x: hidden;
+  }
+
+  ::selection{ background: var(--amber-drop); color: var(--ink-indigo-deep); }
+
+  h1, h2, h3, .display{
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  .eyebrow{
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber-drop);
+  }
+
+  a{ color: inherit; text-decoration: none; }
+
+  /* ---------- Ambient starfield ---------- */
+  #stars{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.9;
+  }
+  .star{
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--moon-glow);
+    border-radius: 50%;
+    animation: twinkle 4s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%, 100%{ opacity: 0.15; }
+    50%{ opacity: 0.9; }
+  }
+
+  /* ---------- Nav ---------- */
+  header{
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.6rem clamp(1.5rem, 5vw, 4rem);
+    backdrop-filter: blur(10px);
+    background: linear-gradient(to bottom, rgba(13,11,28,0.75), transparent);
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap: 0.6rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.03em;
+  }
+  .logo svg{ width: 22px; height: 22px; }
+  nav ul{
+    list-style:none;
+    display:flex;
+    gap: clamp(1.2rem, 3vw, 2.4rem);
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+  }
+  nav ul li a{
+    position: relative;
+    padding-bottom: 4px;
+    opacity: 0.85;
+    transition: opacity 0.3s;
+  }
+  nav ul li a:hover{ opacity: 1; }
+  nav ul li a::after{
+    content:'';
+    position:absolute;
+    left:0; bottom:0;
+    width:0; height:1px;
+    background: var(--amber-drop);
+    transition: width 0.3s ease;
+  }
+  nav ul li a:hover::after{ width: 100%; }
+  .nav-cta{
+    border: 1px solid var(--line);
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    display: none;
+  }
+  @media(min-width: 720px){ .nav-cta{ display:inline-block; } }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 1.5rem 4rem;
+    z-index: 1;
+  }
+  .hero-inner{ max-width: 780px; }
+  .moon-wrap{
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 2rem;
+    position: relative;
+  }
+  .moon-wrap svg{
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 40px rgba(227,178,60,0.35));
+    animation: float 7s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-10px); }
+  }
+  .hero h1{
+    font-size: clamp(2.8rem, 8vw, 5.2rem);
+    line-height: 1.02;
+    margin-bottom: 1.4rem;
+  }
+  .hero h1 em{
+    font-style: italic;
+    color: var(--amber-drop);
+  }
+  .hero p{
+    font-size: 1.05rem;
+    color: var(--fog-grey);
+    max-width: 480px;
+    margin: 0 auto 2.4rem;
+    line-height: 1.7;
+  }
+  .btn-row{
+    display:flex;
+    gap: 1rem;
+    justify-content:center;
+    flex-wrap: wrap;
+  }
+  .btn{
+    padding: 0.85rem 1.9rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    transition: all 0.3s ease;
+  }
+  .btn-solid{
+    background: var(--amber-drop);
+    color: var(--ink-indigo-deep);
+    font-weight: 600;
+  }
+  .btn-solid:hover{ transform: translateY(-2px); box-shadow: 0 10px 30px rgba(227,178,60,0.3); }
+  .btn-outline{
+    border: 1px solid var(--line);
+  }
+  .btn-outline:hover{ border-color: var(--amber-drop); color: var(--amber-drop); }
+
+  .scroll-cue{
+    position: absolute;
+    bottom: 2.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--fog-grey);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .scroll-cue::after{
+    content:'';
+    width:1px; height: 34px;
+    background: linear-gradient(var(--fog-grey), transparent);
+    animation: drip 2s ease-in-out infinite;
+  }
+  @keyframes drip{
+    0%{ transform: scaleY(0); transform-origin: top; opacity: 0.4; }
+    50%{ transform: scaleY(1); opacity: 1; }
+    100%{ transform: scaleY(0); transform-origin: bottom; opacity: 0.4; }
+  }
+
+  section{ position: relative; z-index: 1; }
+
+  /* ---------- Section heading shared ---------- */
+  .section-head{
+    max-width: 640px;
+    margin: 0 auto 3.5rem;
+    text-align: center;
+  }
+  .section-head .eyebrow{ display:block; margin-bottom: 0.8rem; }
+  .section-head h2{ font-size: clamp(2rem, 4.5vw, 3rem); }
+
+  /* ---------- Phase menu (signature element) ---------- */
+  .phases{
+    padding: 6rem 1.5rem 7rem;
+    background: var(--plum-shadow-soft);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    transition: background 1.2s ease;
+  }
+  .phase-toggle{
+    display: flex;
+    justify-content: center;
+    gap: clamp(1.2rem, 4vw, 3rem);
+    margin-bottom: 3.5rem;
+    flex-wrap: wrap;
+  }
+  .phase-btn{
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--fog-grey);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .phase-btn svg{ width: 46px; height: 46px; transition: filter 0.4s ease; }
+  .phase-btn.active{
+    opacity: 1;
+    color: var(--moon-glow);
+    transform: translateY(-4px);
+  }
+  .phase-btn.active svg{ filter: drop-shadow(0 0 14px rgba(227,178,60,0.55)); }
+  .phase-btn span.time{ color: var(--amber-drop); font-size: 0.62rem; }
+
+  .menu-panels{ position: relative; max-width: 760px; margin: 0 auto; min-height: 380px; }
+  .menu-panel{
+    display: none;
+    animation: fadein 0.6s ease;
+  }
+  .menu-panel.active{ display: block; }
+  @keyframes fadein{ from{ opacity:0; transform: translateY(8px); } to{ opacity:1; transform: translateY(0);} }
+
+  .menu-panel .panel-intro{
+    text-align: center;
+    color: var(--lilac-mist);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    margin-bottom: 2.6rem;
+  }
+  .menu-items{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.6rem 2.6rem;
+  }
+  .menu-item{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px dashed var(--line);
+  }
+  .menu-item .name{ font-size: 1.15rem; }
+  .menu-item .desc{
+    display:block;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.8rem;
+    color: var(--fog-grey);
+    margin-top: 0.3rem;
+    max-width: 30ch;
+  }
+  .menu-item .price{
+    font-family: 'Space Mono', monospace;
+    color: var(--amber-drop);
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  /* ---------- Story ---------- */
+  .story{
+    padding: 7rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: center;
+  }
+  @media(min-width: 860px){
+    .story{ grid-template-columns: 0.9fr 1.1fr; }
+  }
+  .story-visual{
+    aspect-ratio: 4/5;
+    border-radius: 4px;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(227,178,60,0.18), transparent 55%),
+      linear-gradient(160deg, var(--plum-shadow), var(--ink-indigo-deep));
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .story-visual::before{
+    content:'';
+    position:absolute;
+    width: 200%; height: 200%;
+    top: -50%; left: -50%;
+    background-image: radial-gradient(1px 1px at 20% 30%, var(--moon-glow) 0, transparent 100%),
+                      radial-gradient(1px 1px at 60% 70%, var(--moon-glow) 0, transparent 100%),
+                      radial-gradient(1.5px 1.5px at 80% 20%, var(--moon-glow) 0, transparent 100%),
+                      radial-gradient(1px 1px at 40% 85%, var(--moon-glow) 0, transparent 100%);
+    opacity: 0.6;
+  }
+  .story-visual .drop-icon{
+    position: absolute;
+    bottom: 12%; left: 50%;
+    transform: translateX(-50%);
+    width: 70px; height: 70px;
+    opacity: 0.9;
+  }
+  .story-text .eyebrow{ margin-bottom: 1rem; }
+  .story-text h2{ font-size: clamp(1.9rem, 4vw, 2.7rem); margin-bottom: 1.4rem; }
+  .story-text p{
+    color: var(--fog-grey);
+    line-height: 1.85;
+    margin-bottom: 1.2rem;
+    font-size: 0.98rem;
+  }
+  .story-text p:last-child{ margin-bottom: 0; }
+  .story-text strong{ color: var(--moon-glow); font-weight: 600; }
+
+  /* ---------- Gallery ---------- */
+  .gallery{
+    padding: 6rem 1.5rem 7rem;
+  }
+  .gallery-grid{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 120px;
+    gap: 0.9rem;
+  }
+  .g-tile{
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(150deg, var(--plum-shadow), var(--ink-indigo-deep));
+    border: 1px solid var(--line);
+    display:flex;
+    align-items:flex-end;
+    padding: 0.8rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--fog-grey);
+    text-transform: uppercase;
+  }
+  .g-tile::before{
+    content:'';
+    position:absolute; inset:0;
+    background: radial-gradient(circle at 70% 20%, rgba(227,178,60,0.15), transparent 60%);
+  }
+  .g1{ grid-column: span 3; grid-row: span 2; }
+  .g2{ grid-column: span 3; grid-row: span 1; }
+  .g3{ grid-column: span 3; grid-row: span 1; }
+  .g4{ grid-column: span 2; grid-row: span 1; }
+  .g5{ grid-column: span 2; grid-row: span 1; }
+  .g6{ grid-column: span 2; grid-row: span 1; }
+  @media(max-width: 720px){
+    .gallery-grid{ grid-template-columns: repeat(2, 1fr); grid-auto-rows: 110px; }
+    .g-tile{ grid-column: span 1 !important; grid-row: span 1 !important; }
+    .g1{ grid-column: span 2 !important; grid-row: span 2 !important; }
+  }
+
+  /* ---------- Visit / footer ---------- */
+  .visit{
+    padding: 6rem 1.5rem;
+    background: var(--ink-indigo-deep);
+    border-top: 1px solid var(--line);
+    text-align: center;
+  }
+  .visit h2{ font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom: 1rem; }
+  .visit p.sub{ color: var(--fog-grey); margin-bottom: 3rem; }
+  .visit-grid{
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2.4rem;
+    text-align: left;
+  }
+  .visit-card .eyebrow{ margin-bottom: 0.7rem; }
+  .visit-card p{ font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; line-height: 1.6; }
+  .visit-card p.small{ font-family: 'Manrope', sans-serif; font-size: 0.85rem; color: var(--fog-grey); margin-top: 0.5rem; }
+
+  footer{
+    padding: 2.4rem 1.5rem;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: var(--fog-grey);
+    border-top: 1px solid var(--line);
+    background: var(--ink-indigo-deep);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+
+  :focus-visible{
+    outline: 2px solid var(--amber-drop);
+    outline-offset: 3px;
+  }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<header>
+  <a href="#" class="logo">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M15 3C10 3 6 7 6 12s4 9 9 9c1.6 0 3.1-.4 4.4-1.2-3.6-.4-6.4-3.5-6.4-7.3s2.8-6.9 6.4-7.3C18.1 3.4 16.6 3 15 3z" fill="#e3b23c"/></svg>
+    Moon Drop
+  </a>
+  <nav>
+    <ul>
+      <li><a href="#phases">Menu</a></li>
+      <li><a href="#story">Story</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+  </nav>
+  <a href="#visit" class="nav-cta">Reserve a table</a>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="moon-wrap">
+      <svg viewBox="0 0 100 100" fill="none">
+        <defs>
+          <radialGradient id="moonGrad" cx="35%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="#fdf6e3"/>
+            <stop offset="100%" stop-color="#e3b23c"/>
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="50" r="42" fill="url(#moonGrad)"/>
+        <circle cx="34" cy="38" r="6" fill="#d99a2a" opacity="0.35"/>
+        <circle cx="60" cy="60" r="9" fill="#d99a2a" opacity="0.25"/>
+        <circle cx="65" cy="32" r="4" fill="#d99a2a" opacity="0.3"/>
+      </svg>
+    </div>
+    <span class="eyebrow">A slow cafe for after dark</span>
+    <h1>Coffee that falls<br><em>like moonlight.</em></h1>
+    <p>Moon Drop Cafe pours for every hour the sky turns — from first light espresso to midnight cardamom pour-overs. Come for the quiet, stay for the drip.</p>
+    <div class="btn-row">
+      <a href="#phases" class="btn btn-solid">See the menu</a>
+      <a href="#visit" class="btn btn-outline">Find us</a>
+    </div>
+  </div>
+  <div class="scroll-cue">DRIFT DOWN</div>
+</section>
+
+<section class="phases" id="phases">
+  <div class="section-head">
+    <span class="eyebrow">Ordered by the sky, not the clock</span>
+    <h2>The Moon Phase Menu</h2>
+  </div>
+
+  <div class="phase-toggle" role="tablist" aria-label="Menu by time of day">
+    <button class="phase-btn active" data-phase="dawn" role="tab" aria-selected="true">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M17 8A5 5 0 0 1 7 8c0 1.5.6 2.8 1.6 3.8A5 5 0 0 0 17 8z" fill="#b9a6d9"/></svg>
+      Waxing Crescent
+      <span class="time">6 — 11am</span>
+    </button>
+    <button class="phase-btn" data-phase="noon" role="tab" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" fill="#e3b23c"/></svg>
+      Full Moon
+      <span class="time">11am — 5pm</span>
+    </button>
+    <button class="phase-btn" data-phase="night" role="tab" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M20 12.5A8.5 8.5 0 1 1 11.5 4a7 7 0 0 0 8.5 8.5z" fill="#f4efe0"/></svg>
+      New Moon
+      <span class="time">5 — 11pm</span>
+    </button>
+  </div>
+
+  <div class="menu-panels">
+    <div class="menu-panel active" id="panel-dawn">
+      <p class="panel-intro">"Soft light, softer wake-up." — the early pours</p>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div><span class="name">Crescent Espresso</span><span class="desc">Double shot, single-origin Ethiopian, honey rim</span></div>
+          <span class="price">$4.50</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Silver Oat Latte</span><span class="desc">Oat milk, vanilla bean, a whisper of sea salt</span></div>
+          <span class="price">$5.75</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">First Light Croissant</span><span class="desc">Laminated fresh at 5am, brown butter glaze</span></div>
+          <span class="price">$4.25</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Fog Matcha</span><span class="desc">Ceremonial grade, steamed almond milk</span></div>
+          <span class="price">$5.50</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="panel-noon">
+      <p class="panel-intro">"Full light, full flavor." — the daytime table</p>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div><span class="name">Amber Drop Iced Pour</span><span class="desc">Slow-dripped 12hrs, orange peel oil finish</span></div>
+          <span class="price">$5.75</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Golden Hour Sando</span><span class="desc">Miso egg salad, shokupan, black sesame</span></div>
+          <span class="price">$8.50</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Sun Ray Citrus Tart</span><span class="desc">Yuzu curd, torched meringue peaks</span></div>
+          <span class="price">$6.00</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Harvest Grain Bowl</span><span class="desc">Farro, roasted squash, tahini drizzle</span></div>
+          <span class="price">$11.00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="panel-night">
+      <p class="panel-intro">"No light needed." — the late pours</p>
+      <div class="menu-items">
+        <div class="menu-item">
+          <div><span class="name">Midnight Cardamom Pour-over</span><span class="desc">Dark roast, whole cardamom pod steep</span></div>
+          <span class="price">$5.25</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Lunar Affogato</span><span class="desc">Vanilla bean gelato, double ristretto, cocoa nib</span></div>
+          <span class="price">$6.50</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Shadow Stout Float</span><span class="desc">House cold brew, oat cream, dark chocolate shard</span></div>
+          <span class="price">$6.75</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Star Chart Cheeseboard</span><span class="desc">Rotating local cheeses, fig, dark honey</span></div>
+          <span class="price">$14.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="story" id="story">
+  <div class="story-visual">
+    <svg class="drop-icon" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2C12 2 5 11.5 5 16a7 7 0 0 0 14 0c0-4.5-7-14-7-14z" fill="#e3b23c" opacity="0.9"/>
+    </svg>
+  </div>
+  <div class="story-text">
+    <span class="eyebrow">Our story</span>
+    <h2>Named for the drip that never rushes.</h2>
+    <p>Moon Drop began as a single pour-over stand run out of a converted greenhouse, where the founders noticed that coffee, like the moon, has its own unhurried rhythm — rising slowly, changing shape through the day, never quite the same twice.</p>
+    <p>Every cup here is timed to that rhythm. Our baristas track <strong>slow-drip batches through the night</strong> so the first customer at dawn gets coffee that's been quietly becoming itself for twelve hours.</p>
+    <p>No rushing, no neon, no laptops-only policy. Just good light, better coffee, and a room built for lingering.</p>
+  </div>
+</section>
+
+<section class="gallery" id="gallery">
+  <div class="section-head">
+    <span class="eyebrow">Inside the cafe</span>
+    <h2>A Room Built for Lingering</h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="g-tile g1">Window seat, dusk</div>
+    <div class="g-tile g2">Pour-over station</div>
+    <div class="g-tile g3">Courtyard candlelight</div>
+    <div class="g-tile g4">Fresh pastry case</div>
+    <div class="g-tile g5">Reading nook</div>
+    <div class="g-tile g6">Roastery corner</div>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <h2>Come sit under it with us.</h2>
+  <p class="sub">Open every day the moon rises — which is to say, every day.</p>
+  <div class="visit-grid">
+    <div class="visit-card">
+      <span class="eyebrow">Address</span>
+      <p>14 Crescent Row<br>Weybridge, Surrey<br>KT12 4JZ</p>
+      <p class="small">Two minutes' walk from the river path</p>
+    </div>
+    <div class="visit-card">
+      <span class="eyebrow">Hours</span>
+      <p>Mon – Fri, 6am – 11pm<br>Sat – Sun, 7am – 12am</p>
+      <p class="small">Kitchen closes 45 minutes before last call</p>
+    </div>
+    <div class="visit-card">
+      <span class="eyebrow">Reach us</span>
+      <p>hello@moondropcafe.com<br>01932260738</p>
+      <p class="small">Private moonlit dinners by request</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 MOON DROP CAFE — BREWED BY MOONLIGHT
+</footer>
+
+<script>
+  // Ambient starfield
+  const starsContainer = document.getElementById('stars');
+  const starCount = 60;
+  for(let i=0; i<starCount; i++){
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random()*100 + '%';
+    star.style.top = Math.random()*70 + '%';
+    star.style.animationDelay = (Math.random()*4) + 's';
+    star.style.opacity = Math.random()*0.6 + 0.2;
+    starsContainer.appendChild(star);
+  }
+
+  // Phase menu switcher
+  const phaseButtons = document.querySelectorAll('.phase-btn');
+  const panels = document.querySelectorAll('.menu-panel');
+  const phasesSection = document.querySelector('.phases');
+
+  const bgMap = {
+    dawn: 'linear-gradient(180deg, #241d47, #201938)',
+    noon: 'linear-gradient(180deg, #2a2149, #241d47)',
+    night: 'linear-gradient(180deg, #17132e, #0d0b1c)'
+  };
+
+  phaseButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const phase = btn.dataset.phase;
+
+      phaseButtons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected','true');
+
+      panels.forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + phase).classList.add('active');
+
+      phasesSection.style.background = bgMap[phase];
+    });
+  });
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
